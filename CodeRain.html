@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      background: black;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bg"></canvas>
+</body>
+<script>
+const cvs = document.getElementById('bg');
+
+const width = window.innerWidth * devicePixelRatio;
+const height = window.innerHeight * devicePixelRatio;
+
+cvs.width = width;
+cvs.height = height;
+
+const ctx = cvs.getContext('2d');
+// 字体大小
+const fontSize = 8 * devicePixelRatio;
+// 列数
+const columnsNum = Math.floor(width / fontSize);
+// 每列的下一个字符的位置
+const nextChar = new Array(columnsNum).fill(0);
+
+function draw() {
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+  ctx.fillRect(0, 0, width, height);
+  for (let i = 0; i < columnsNum; i++) {
+    const char = getRandomChar();
+    ctx.fillStyle = getRandomColor();
+    ctx.font = `${fontSize}px Roboto Mono`; 
+    const x = i * fontSize;
+    const y = (nextChar[i] + 1) * fontSize;
+    ctx.fillText(char, x, y);
+    if (y > height && Math.random() > 0.99) {
+      nextChar[i] = 0;
+    } else {
+      nextChar[i]++;
+    }
+  }
+}
+
+function getRandomColor() {
+  return '#' + Math.floor(Math.random() * 16777215).toString(16);
+}
+
+function getRandomChar() {
+  return String.fromCharCode(Math.random() * 26 + 97);
+}
+
+draw();
+setInterval(draw, 50);
+</script>
+</html>
